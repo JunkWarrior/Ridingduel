@@ -1,0 +1,109 @@
+初始化GIT仓库
+1.选择某个目录作为git仓库
+2.cd到当前目录下
+D:\Git>cd learngit
+3.使用git init将当前目录创建为一个git仓库,会自动生成.git目录
+D:\Git\learngit>git init
+Initialized empty Git repository in D:/Git/learngit/.git/
+
+
+添加文件到GIT仓库
+1.将某个文件(readme.txt)放入git仓库目录下(或者子目录)
+2.用git add命令告诉Git,将文件添加到仓库
+D:\Git\learngit>git add readme.txt
+3.用git commit命令告诉Git,将文件提交到仓库
+D:\Git\learngit>git commit -m "wrote a readme file"
+[master (root-commit) 22ea34e] wrote a readme file
+ 1 file changed, 2 insertions(+)
+ create mode 100644 readme.txt
+
+
+随时掌控仓库当前状态
+git status命令
+D:\Git\learngit>git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   readme.txt
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        Git init&add.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+查看上次未上传的改动
+git diff命令
+D:\Git\learngit>git diff
+diff --git a/readme.txt b/readme.txt
+index 0b823c9..b4bc5e3 100644
+--- a/readme.txt
++++ b/readme.txt
+@@ -1,2 +1,2 @@
+-Git is a version control system.
++Git is a distributed version control system.^M
+ Git is free softwre.
+
+
+显示最近一段时间的提交
+git log命令(会显示最近的三次提交)
+D:\Git\learngit>git log
+commit 662696d0480f3d5b6133cb3805164a1fee02085c
+Author: Peter Petrelli <18817368006@126.com>
+Date:   Thu May 25 14:47:35 2017 +0800
+
+    append GPL
+
+commit 2e52673dcaac4e4b56bd7dd52acf648685642df5
+Author: Peter Petrelli <18817368006@126.com>
+Date:   Thu May 25 14:32:10 2017 +0800
+
+    add word distributed
+
+commit 22ea34ecad7147aae27c2aacc8c25b3c58824448
+Author: Peter Petrelli <18817368006@126.com>
+Date:   Thu May 25 14:15:01 2017 +0800
+
+    wrote a readme file
+
+增加参数 --pretty=oneline，就会只看到commit id和description
+D:\Git\learngit>git log --pretty=oneline
+662696d0480f3d5b6133cb3805164a1fee02085c append GPL
+2e52673dcaac4e4b56bd7dd52acf648685642df5 add word distributed
+22ea34ecad7147aae27c2aacc8c25b3c58824448 wrote a readme file
+
+
+版本回退
+git reset --hard HEAD^
+HEAD^=上一个版本=HEAD~1
+HEAD^^=上上一个版本=HEAD~2
+HEAD~100=往上100个版本
+Windows CMD控制器中使用HEAD^会异常，由于无法识别^
+zhouq@ZHOU-QUNJIAN MINGW64 /d/Git/learngit (master)
+$ git reset --hard HEAD^
+HEAD is now at 2e52673 add word distributed
+
+此时版本已经回退至上一个版本(2e52673),此时若想恢复到被抛弃的新版本(662696d)
+zhouq@ZHOU-QUNJIAN MINGW64 /d/Git/learngit (master)
+$ git reset --hard 662696d0480f3d5b6133cb3805164a1fee02085c
+HEAD is now at 662696d append GPL
+
+若你已经忘记了新版本的commit id(662696d),可以通过git reflog来尝试找到上一次的commit id
+zhouq@ZHOU-QUNJIAN MINGW64 /d/Git/learngit (master)
+$ git reflog
+662696d HEAD@{0}: reset: moving to 662696d0480f3d5b6133cb3805164a1fee02085c
+2e52673 HEAD@{1}: reset: moving to HEAD^
+662696d HEAD@{2}: commit: append GPL
+2e52673 HEAD@{3}: commit: add word distributed
+22ea34e HEAD@{4}: commit (initial): wrote a readme file
+
+由于git实际上是用一个head指针控制版本，所以git允许我们在各版本之间使用git reset --hard commit_id进行穿梭
+
+
+
+
+
