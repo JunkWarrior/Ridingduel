@@ -104,6 +104,41 @@ $ git reflog
 由于git实际上是用一个head指针控制版本，所以git允许我们在各版本之间使用git reset --hard commit_id进行穿梭
 
 
+工作区和暂存区的概念
+工作区(Working Directory)
+类似于D:\Git\learngit
+
+版本库(Repository)
+类似于D:\Git\learngit\.git
+其中有个最重要的东西,成为stage或index的暂存区
+
+把文件往Git版本库里添加的时候，是分两步执行的：
+第一步是用git add把工作区的文件添加进去，实际上就是把文件修改添加到暂存区；
+第二步是用git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
 
 
+管理修改
+对于同一个文件，进行如下操作：
+第一次修改 -> git add -> 第二次修改 -> git commit
+此时，只会commit第一次修改，第二次修改不会被提交。
+也就是说git commit只负责暂存区的修改，不会直接管理工作区的文件。
+
+若想提交第二次修改，可如下操作：
+第一次修改 -> git add -> 第二次修改 -> git add -> git commit
+
+
+撤销修改
+对于未被git add的文件，使用如下方法可以撤销修改：
+git checkout -- [filename]
+对于已被git add进暂存区，但并没有被commit的文件，使用如下方法可以将暂存区的修改放回工作区：
+git reset HEAD [filename]
+
+
+删除文件
+从版本库中删除文件:
+git rm [filename]
+git commit -m "..."
+如果删错了，需要复原，同样使用：
+git checkout -- [filename]
+git checkout其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”。
 
