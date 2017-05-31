@@ -1,0 +1,73 @@
+远程仓库
+将一个现有的本地仓库与远程仓库作关联:
+git remote add origin git@server-name:path/repo-name.git
+git remote add origin [远程仓库url](example:git@github.com:JunkWarrior/Ridingduel.git)
+
+如果创建远程仓库时，生成了一个README.md文件，需要先将远程仓库的内容整合到本地仓库中
+git pull --rebase origin master
+
+然后将本地库的所有内容推送到远程库上:
+git push -u origin master
+
+实质上是把当前分支master推送到远程origin
+-u参数，意味着推送的同时，关联了本地master和远程master
+
+之后本地的修改，推送到GitHub，都可以使用
+git push origin master
+
+
+本地没有仓库，从远程仓库克隆
+git clone git@server-name:path/repo-name.git
+
+默认的git://使用ssh，亦可使用https等其他协议，如https://github.com/JunkWarrior/Ridingduel.git
+https有两大缺点，速度慢且每次推送必须输入口令
+
+
+分支管理
+git使用HEAD指针指向分支指针的方式，实现分支功能，master是主指针。
+通常情况，HEAD指针指向master主指针。
+
+创建分支
+git checkout -b [branch_name]
+-b参数代表创建并切换，相当于两条指令:
+git branch [branch_name]
+git checkout [branch_name]
+
+列出所有分支
+git branch
+当前分支前会有一个*
+
+分支切换
+git checkout [branch_name]
+
+在新的分支[branch_name]上的修改，不会直接合并到master上，直到执行了以下指令：
+git checkout master
+git merge [branch_name]
+此时master指针就指向了原先[branch_name]指向的提交点。
+
+在完成了合并之后，可以将不需要的分支删除
+git branch -d [branch_name]
+
+
+冲突
+例如:
+master上有一个readme.txt,最后的内容是Creating a new branch is quick & simple.
+feature1上也有一个readme.txt,最后的内容是Creating a new branch is quick AND simple.
+
+此时merge，会出现冲突
+$ git merge feature1
+Auto-merging readme.txt
+CONFLICT (content): Merge conflict in readme.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+readme.txt最后的内容，也会变成：
+<<<<<<< HEAD
+Creating a new branch is quick & simple.
+=======
+Creating a new branch is quick AND simple.
+>>>>>>> feature1
+
+此时必须我们手动去解决冲突，即选择一个为最终版本，git add并git commit即可。
+
+git log --graph可以看到分支合并图。
+git log --graph --pretty=oneline --abbrev-commit
